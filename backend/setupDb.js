@@ -8,7 +8,7 @@ require('dotenv').config();
         const connection = await mysql.createConnection({
             host: process.env.DB_HOST || 'localhost',
             user: process.env.DB_USER || 'root',
-            password: process.env.DB_PASS || 'naveen',
+            password: process.env.DB_PASS || 'xxxxxx',
             multipleStatements: true
         });
 
