@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TrackWise Premium</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <div class="top-nav" id="topNav">
+        <h2 style="margin:0; font-size: 20px;">TrackWise</h2>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" onchange="toggleTheme()" />
+                    <div class="slider"></div>
+                </label>
+            </div>
+            <button onclick="goToSettings()"
+                style="width: auto; padding: 8px 16px; margin:0; background: var(--sec-btn-bg); color: var(--sec-btn-text);">Settings</button>
+            <button onclick="logout()"
+                style="width: auto; padding: 8px 16px; margin:0; background: #333;">Logout</button>
+        </div>
+    </div>
+
+    <!-- AUTH VIEW -->
+    <div id="authView" class="view active container">
+        <div class="glass-card text-center" style="text-align: center">
+            <h1
+                style="background: -webkit-linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                TrackWise</h1>
+            <p style="color:var(--text-muted); margin-bottom:30px;">Premium Expense Insights</p>
+
+            <div id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email (you@example.com)">
+                <input type="password" id="loginPass" placeholder="Password">
+                <button onclick="login()">Sign In</button>
+                <p style="font-size:14px; color: var(--text-muted); margin-top: 20px; cursor:pointer;"
+                    onclick="toggleAuth()">Create
+                    new account?</p>
+            </div>
+
+            <div id="registerForm" style="display:none;">
+                <input type="text" id="regName" placeholder="Your Name">
+                <input type="email" id="regEmail" placeholder="Email">
+                <input type="password" id="regPass" placeholder="Choose a Password">
+                <button onclick="register()">Create Account</button>
+                <p style="font-size:14px; color: var(--text-muted); margin-top: 20px; cursor:pointer;"
+                    onclick="toggleAuth()">Already
+                    have an account? Sign In</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS VIEW / CONFIGURE -->
+    <div id="settingsView" class="view container">
+        <div class="glass-card">
+            <h2>Configuration & Settings</h2>
+            <p style="color: var(--text-muted); font-size: 14px;">Manage your preferences and extra options here.</p>
+            <label style="font-size: 14px; color:var(--text-muted);">Theme Color Hex (Advanced)</label>
+            <input type="text" id="themeColor" placeholder="e.g. #8a2be2">
+            <button onclick="applySettings()">Save Configuration</button>
+
+            <button style="background: var(--sec-btn-bg); color: var(--sec-btn-text); margin-top:20px;"
+                onclick="goToDashboard()">&larr; Back to
+                Dashboard</button>
+        </div>
+    </div>
+
+    <!-- WIZARD STEP 1: CATEGORY -->
+    <div id="catView" class="view container">
+        <div class="glass-card">
+            <div class="stepper">Step 1 of 3: Categories</div>
+            <h2>Create a Category</h2>
+            <p style="color: var(--text-muted); font-size: 14px;">Define primary labels (e.g. Food, Travel).</p>
+            <input type="text" id="catName" placeholder="Category Name">
+            <button onclick="createCategory()">Add Category</button>
+
+            <div id="catList" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
+
+            <button style="background: var(--sec-btn-bg); color: var(--sec-btn-text); margin-top:30px;"
+                onclick="goToGroups()">Proceed to Groups
+                &rarr;</button>
+        </div>
+    </div>
+
+    <!-- WIZARD STEP 2: GROUP -->
+    <div id="groupView" class="view container">
+        <div class="glass-card">
+            <div class="stepper">Step 2 of 3: Groups</div>
+            <h2>Create a Group</h2>
+            <p style="color: var(--text-muted); font-size: 14px;">Define a sub-classification (e.g. Personal, Family).
+            </p>
+            <input type="text" id="grpName" placeholder="Group Name">
+            <button onclick="createGroup()">Add Group</button>
+
+            <div id="grpList" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
+
+            <button style="background: var(--sec-btn-bg); color: var(--sec-btn-text); margin-top:30px;"
+                onclick="goToExpenses()">Proceed to
+                Expenses &rarr;</button>
+        </div>
+    </div>
+
+    <!-- WIZARD STEP 3: EXPENSE -->
+    <div id="expenseView" class="view container">
+        <div class="glass-card">
+            <div class="stepper">Step 3 of 3: Data Entry</div>
+            <h2>Log an Expense</h2>
+            <select id="expCat">
+                <option value="">Select Category</option>
+            </select>
+            <select id="expGrp">
+                <option value="">Select Group (Optional)</option>
+            </select>
+            <input type="number" id="expAmt" placeholder="Amount ($)" step="0.01">
+            <input type="text" id="expDesc" placeholder="Description (e.g. Pizza)">
+            <input type="date" id="expDate">
+            <button onclick="createExpense()">Save Expense</button>
+
+            <button style="background: linear-gradient(135deg, var(--accent), #1f9e5f); color: #000; margin-top:30px;"
+                onclick="goToDashboard()">Finish & View Dashboard &rarr;</button>
+        </div>
+    </div>
+
+    <div id="dashboardView" class="view container" style="max-width: 900px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="font-size:28px; margin:0;">Dashboard Overview</h2>
+            <button onclick="exportPDF()"
+                style="width:auto; padding:8px 16px; background: var(--sec-btn-bg); color: var(--sec-btn-text); margin:0;">Download
+                PDF
+                📥</button>
+        </div>
+
+        <div class="dashboard-grid" id="pdfContent">
+            <!-- Wrap everything we want in the PDF -->
+            <div style="width: 100%;">
+                <div class="stat-card" style="margin-bottom: 20px;">
+                    <h3 style="color:var(--text-muted); font-size: 14px; margin:0">Total Spent</h3>
+                    <p id="dashTotal" style="font-size: 32px; font-weight: bold; margin: 10px 0; color: var(--accent);">
+                        $0.00</p>
+                </div>
+            </div>
+            <div class="stat-card"
+                style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
+                <button onclick="goToCategories()" style="margin:0">Add New Data +</button>
+            </div>
+
+            <!-- NEW TREND GRAPH -->
+            <div class="glass-card" style="grid-column: 1 / -1; margin-bottom: 20px; padding: 20px;">
+                <h3 style="margin-top:0; font-size: 16px;">Spending Trend (Line Chart)</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+
+            <div class="glass-card" style="padding: 15px;">
+                <h3 style="margin-top:0; font-size: 16px;">By Category</h3>
+                <canvas id="catChart"></canvas>
+            </div>
+            <div class="glass-card" style="padding: 15px;">
+                <h3 style="margin-top:0; font-size: 16px;">By Group</h3>
+                <canvas id="grpChart"></canvas>
+            </div>
+
+            <h3 style="margin-top:30px; grid-column: 1 / -1;">Recent Transactions</h3>
+            <div id="recentExpList"
+                style="grid-column: 1 / -1; background: var(--glass); border-radius:12px; padding:15px; border: 1px solid var(--glass-border);">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
